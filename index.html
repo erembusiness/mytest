@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أطروحة التحول الاستراتيجي</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+        }
+
+        .slide {
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            font-family: 'Noto Kufi Arabic', Arial, sans-serif;
+            background: linear-gradient(135deg, rgba(77, 91, 114, 0.05) 0%, rgba(77, 91, 114, 0.15) 100%);
+            color: #4d5b72;
+            position: relative;
+        }
+
+        .slide-header {
+            padding: 30px 50px 20px;
+            background: linear-gradient(to bottom, rgba(77, 91, 114, 1) 0%, rgba(77, 91, 114, 0.9) 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            height: 180px;
+        }
+
+        .slide-content {
+            padding: 30px 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .strategy-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .strategy-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            height: 240px;
+            margin-bottom: 20px;
+        }
+
+        .slide-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #707566;
+            font-size: 14px;
+            border-top: 1px solid rgba(77, 91, 114, 0.1);
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .page-indicator {
+            display: inline-block;
+            background-color: #ff891c;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-weight: 700;
+            font-size: 18px;
+            color: white;
+            background-color: rgba(255, 137, 28, 0.2);
+            padding: 8px 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .logo-icon {
+            margin-left: 8px;
+            color: #ff891c;
+        }
+
+        .kpi-card {
+            background: linear-gradient(135deg, rgba(77, 91, 114, 0.1) 0%, rgba(77, 91, 114, 0.05) 100%);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            background: linear-gradient(135deg, rgba(77, 91, 114, 0.15) 0%, rgba(77, 91, 114, 0.1) 100%);
+        }
+
+        .kpi-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+
+        .kpi-ebitda {
+            background: linear-gradient(135deg, #8b3d47 0%, #4d5b72 100%);
+        }
+
+        .kpi-diversification {
+            background: linear-gradient(135deg, #ff891c 0%, #8b3d47 100%);
+        }
+
+        .kpi-capital {
+            background: linear-gradient(135deg, #4d5b72 0%, #3a221e 100%);
+        }
+
+        .kpi-expansion {
+            background: linear-gradient(135deg, #707566 0%, #8e8e8e 100%);
+        }
+
+        .kpi-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .kpi-value {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #8b3d47;
+        }
+
+        .kpi-description {
+            font-size: 0.9rem;
+            color: #707566;
+            margin-top: 3px;
+        }
+
+        .insight-box {
+            background-color: rgba(255, 137, 28, 0.1);
+            border-right: 4px solid #ff891c;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .comparison-table th {
+            background-color: #4d5b72;
+            color: white;
+            padding: 12px 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: rgba(77, 91, 114, 0.05);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .quote-box {
+            background-color: #3a221e;
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            margin: 30px 0 15px;
+        }
+
+        /* .quote-box::before {
+            content: "" ";
+ font-size: 5rem;
+            color: rgba(255, 137, 28, 0.3);
+            position: absolute;
+            top: -15px;
+            right: 10px;
+            line-height: 1;
+        } */
+
+        .quote-content {
+            position: relative;
+            z-index: 1;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .quote-source {
+            font-weight: 600;
+            color: #ff891c;
+            margin-top: 10px;
+        }
+
+        .dot-separator {
+            margin: 0 5px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .bg-pattern {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 10% 90%, rgba(77, 91, 114, 0.05) 0%, rgba(77, 91, 114, 0.05) 5%, transparent 5.1%),
+                radial-gradient(circle at 90% 10%, rgba(139, 61, 71, 0.05) 0%, rgba(139, 61, 71, 0.05) 5%, transparent 5.1%);
+            background-size: 120px 120px, 150px 150px;
+            background-repeat: repeat;
+            z-index: -1;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide">
+        <div class="bg-pattern"></div>
+
+        <div class="logo">
+            <i class="fas fa-chart-line logo-icon"></i>
+            الخليج المالي
+        </div>
+
+        <div class="slide-header">
+            <h1 class="text-3xl font-bold mb-2">أطروحة التحول الاستراتيجي</h1>
+            <p class="text-lg text-yellow-200 mb-4">الاستحواذ على «بروج» كحل مالي واستراتيجي لتنويع مصادر الدخل وتعزيز
+                الأداء</p>
+        </div>
+
+        <div class="slide-content">
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <h2 class="text-2xl font-bold mb-4 text-gray-700 border-r-4 border-yellow-500 pr-3">الاستحواذ حلٌّ
+                        مالي</h2>
+
+                    <div class="kpi-card opacity-0" id="card1">
+                        <div class="kpi-icon kpi-ebitda">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <div class="kpi-title">مساهمة فورية في EBITDA</div>
+                            <div class="kpi-value">44.3 مليون دولار</div>
+                            <div class="kpi-description">قيمة مساهمة أصول «بروج» فور إتمام الاستحواذ</div>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card opacity-0" id="card2">
+                        <div class="kpi-icon kpi-diversification">
+                            <i class="fas fa-random"></i>
+                        </div>
+                        <div>
+                            <div class="kpi-title">تنويع الإيرادات</div>
+                            <div class="kpi-value">60% من غير الشحن</div>
+                            <div class="kpi-description">تقليل الاعتماد على سوق الشحن المتقلب موسمياً</div>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card opacity-0" id="card3">
+                        <div class="kpi-icon kpi-capital">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <div>
+                            <div class="kpi-title">تحسين كفاءة رأس المال</div>
+                            <div class="kpi-value">+35% في معدل العائد</div>
+                            <div class="kpi-description">رفع معدلات استخدام الأصول وتحسين التدفقات النقدية</div>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card opacity-0" id="card4">
+                        <div class="kpi-icon kpi-expansion">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <div class="kpi-title">توسع جغرافي استراتيجي</div>
+                            <div class="kpi-value">سوق الفجيرة</div>
+                            <div class="kpi-description">تعزيز الوجود في مركز طاقة رئيسي عالي النمو</div>
+                        </div>
+                    </div>
+
+                    <div class="quote-box opacity-0" id="quote">
+                        <div class="quote-content">
+                            تعكس هذه الصفقة تحولنا المدروس من شركة شحن تركّز على الحجم إلى مزوّد خدمات لوجستية متكاملة
+                            مرتكز على القيمة.
+                        </div>
+                        <div class="quote-source">
+                            أحمد كيلاني <span class="dot-separator">•</span> الرئيس التنفيذي
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-bold mb-4 text-gray-700 border-r-4 border-yellow-500 pr-3">مقارنة المؤشرات
+                        المالية</h2>
+
+                    <div class="chart-container opacity-0" id="projection">
+                        <canvas id="projectionChart"></canvas>
+                    </div>
+
+                    <div class="strategy-card opacity-0" id="table">
+                        <h3 class="font-bold text-lg mb-3 text-gray-700">المقارنة المالية قبل وبعد الدمج</h3>
+
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>المؤشر</th>
+                                    <th>2024 مستقل</th>
+                                    <th>2025 مبدئي بعد الدمج</th>
+                                    <th>نسبة التحسن</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>الإيرادات</td>
+                                    <td>89 مليون درهم</td>
+                                    <td><strong>180–200 مليون</strong></td>
+                                    <td><span class="text-green-600">+112%</span></td>
+                                </tr>
+                                <tr>
+                                    <td>EBITDA</td>
+                                    <td>سالب</td>
+                                    <td><strong>65–80 مليون</strong></td>
+                                    <td><span class="text-green-600">تحول للربحية</span></td>
+                                </tr>
+                                <tr>
+                                    <td>هامش EBITDA</td>
+                                    <td>سالب</td>
+                                    <td><strong>35–40%</strong></td>
+                                    <td><span class="text-green-600">تحسن جوهري</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="insight-box opacity-0" id="insight">
+                        <div class="flex items-start">
+                            <i class="fas fa-lightbulb text-yellow-500 ml-3 text-xl mt-1"></i>
+                            <div>
+                                <p class="text-md font-semibold mb-2">الركائز الرئيسة للتحول الاستراتيجي:</p>
+                                <ul class="text-sm list-disc list-inside text-gray-700">
+                                    <li class="mb-1">تنويع النشاط خارج أسواق الشحن الدورية</li>
+                                    <li class="mb-1">دمج خطوط أعمال مكملة وإضافة خدمات قيمة مضافة</li>
+                                    <li class="mb-1">توطين العمليات في ممرات الطاقة عالية النمو</li>
+                                    <li class="mb-1">تحديث القدرات التشغيلية والتقنية</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide-footer">
+            <div>
+                <span class="page-indicator">9</span>
+                <span class="mr-2">أطروحة التحول الاستراتيجي</span>
+            </div>
+            <div>تحليل مالي | غلف نافيجشن | 2024</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Chart.defaults.font.family = 'Noto Kufi Arabic';
+            Chart.defaults.color = '#4d5b72';
+
+            // Financial Projection Chart
+            const projectionCtx = document.getElementById('projectionChart').getContext('2d');
+            const projectionChart = new Chart(projectionCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['الإيرادات', 'EBITDA', 'هامش التشغيل'],
+                    datasets: [{
+                        label: '2024 (الوضع الحالي)',
+                        data: [89, -5, -5.6],
+                        backgroundColor: 'rgba(77, 91, 114, 0.8)',
+                        borderColor: '#4d5b72',
+                        borderWidth: 1,
+                        borderRadius: 6
+                    }, {
+                        label: '2025 (بعد الدمج)',
+                        data: [190, 70, 36.8],
+                        backgroundColor: 'rgba(139, 61, 71, 0.8)',
+                        borderColor: '#8b3d47',
+                        borderWidth: 1,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'x',
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'الأثر المالي للاستحواذ على بروج',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                top: 5,
+                                bottom: 20
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                            align: 'center',
+                            labels: {
+                                boxWidth: 15,
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                padding: 15,
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            rtl: true
+                        },
+                        tooltip: {
+                            rtl: true,
+                            textDirection: 'rtl',
+                            titleAlign: 'right',
+                            bodyAlign: 'right',
+                            callbacks: {
+                                title: function (tooltipItems) {
+                                    return tooltipItems[0].label;
+                                },
+                                label: function (context) {
+                                    const index = context.dataIndex;
+                                    const value = context.raw;
+
+                                    if (index === 0) {
+                                        return context.dataset.label + ': ' + value + ' مليون درهم';
+                                    } else if (index === 1) {
+                                        return context.dataset.label + ': ' + value + ' مليون درهم';
+                                    } else {
+                                        return context.dataset.label + ': ' + value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        y: {
+                            position: 'right',
+                            grid: {
+                                color: 'rgba(77, 91, 114, 0.1)'
+                            },
+                            ticks: {
+                                font: {
+                                    size: 11
+                                },
+                                callback: function (value) {
+                                    if (value === 0) return '0';
+                                    if (Math.abs(value) < 10) return value;
+                                    return value;
+                                }
+                            },
+                            suggestedMin: -10,
+                            suggestedMax: 200
+                        }
+                    },
+                    barPercentage: 0.7,
+                    categoryPercentage: 0.6,
+                    layout: {
+                        padding: {
+                            left: 10,
+                            right: 10,
+                            top: 0,
+                            bottom: 10
+                        }
+                    }
+                }
+            });
+
+            // Animate elements
+            const elements = ['card1', 'card2', 'card3', 'card4', 'quote', 'projection', 'table', 'insight'];
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    document.getElementById(el).style.transition = 'all 0.5s ease';
+                    document.getElementById(el).style.opacity = 1;
+                }, 300 * (index + 1));
+            });
+        });
+    </script>
+</body>
+
+</html>
